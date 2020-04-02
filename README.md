@@ -7,3 +7,6 @@ Anggota :
   - Fahd
   - Icksan
   
+Absen Berhasil atau engganya : 
+- Icksan berhasil 
+- lanjut ...
