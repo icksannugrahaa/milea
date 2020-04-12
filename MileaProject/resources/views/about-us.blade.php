@@ -14,8 +14,8 @@
         </p>
         <br><br>
         <h1>Anggota : </h1>
-        <li style="list-style: circle">Aldi Herdiansyah - 411550501800</li>
-        <li style="list-style: circle">Fikri Al Ghani - 411550501800</li>
+        <li style="list-style: circle">Aldi Herdiansyah - 41155050180044</li>
+        <li style="list-style: circle">Fikri Al Ghani - 41155050180023</li>
         <li style="list-style: circle">Icksan Nugraha - 41155050180047</li>
         <li style="list-style: circle">Mochammad Fahd Ishamudin - 41155050180048</li>
     </div>
