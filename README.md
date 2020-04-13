@@ -2,8 +2,8 @@
 Millenial Library (created with Laravel and Vue.Js)
 
 Anggota : 
-  - Aldi
+  - Aldi selesai
   - Fikri
   - Fahd
-  - Icksan
+  - Icksan selesai
   
