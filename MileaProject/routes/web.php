@@ -15,3 +15,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'PageController@index');
 Route::get('/about', 'PageController@about');
 Route::get('/login', 'PageController@login');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::prefix('officer')->group(base_path('routes/officer.php'));
