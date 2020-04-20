@@ -10,7 +10,6 @@ class Officer extends Authenticatable
 {
     use Notifiable;
 
-
     protected $table        = 'officers';
     protected $primaryKey   = 'id';
     /**
