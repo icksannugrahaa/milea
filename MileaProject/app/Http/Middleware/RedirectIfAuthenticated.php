@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
         switch ($guard) {
             case 'officer':
                 if (Auth::guard($guard)->check()) {
-                    return redirect(RouteServiceProvider::OFFICER);
+                    return redirect(route('officer.home'));
                 }
                 break;
 
