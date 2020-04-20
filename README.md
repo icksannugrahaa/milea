@@ -7,3 +7,6 @@ Anggota :
   - Muchammad Fahd Ishamuddin - Selesai
   - Icksan Nugraha - Selesai
   
+Absen Berhasil atau engganya : 
+- Icksan berhasil 
+- lanjut ...
