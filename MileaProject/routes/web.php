@@ -21,3 +21,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('officer')->group(base_path('routes/officer.php'));
+
+Route::get('/books/{order}', 'PageController@showall')->name('books.show');
+Route::get('/books/{order}/paginate', 'PageController@fetch_data')->name('books.paginate');
+Route::get('/{judul}', 'PageController@show')->name('book.show');

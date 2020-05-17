@@ -21,6 +21,8 @@ class CreateBooksTable extends Migration
             $table->longText('sinopsis');
             $table->integer('tahunterbit');
             $table->integer('hal');
+            $table->integer('rating');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

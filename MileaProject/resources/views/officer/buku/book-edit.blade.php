@@ -62,7 +62,7 @@
             <label for="sinopsis" class="col-md-2 col-form-label">Sinopsis</label>
 
             <div class="col-md-6">
-                <textarea name="sinopsis" id="sinopsis" class="form-control @error('sinopsis') is-invalid @enderror" rows="2" value="{{ (old('penerbit')) ? old('penerbit') : $penerbit }}">{{ (old('penerbit')) ? old('penerbit') : $penerbit }}</textarea>
+                <textarea name="sinopsis" id="sinopsis" class="form-control @error('sinopsis') is-invalid @enderror" rows="2" value="{{ (old('sinopsis')) ? old('sinopsis') : $sinopsis }}">{{ (old('sinopsis')) ? old('sinopsis') : $sinopsis }}</textarea>
 
                 @error('sinopsis')
                     <span class="invalid-feedback" role="alert">

@@ -6,13 +6,8 @@ use Illuminate\Http\Request;
 use App\Book;
 use App\BookCover;
 
-class BookController extends Controller
+class BookController extends OfficeAuthController
 {
-
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:officer');
-    // }
 
     /**
      * Display a listing of the resource.
@@ -21,7 +16,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        return view('buku.book-list', ['books' => Book::all()]);
+        $list_pengarang             = Book::select('pengarang')->distinct()->get();
+        $list_penerbit              = Book::select('penerbit')->distinct()->get();
+        return view('officer.buku.book-list', ['books' => Book::paginate(10), 'list_pengarang' => $list_pengarang, 'list_penerbit' => $list_penerbit]);
     }
 
     /**
@@ -31,7 +28,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('buku.book-add');
+        return view('officer.buku.book-add');
     }
 
     /**
@@ -42,18 +39,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->file('cover'));
-        $validatedData = $request->validate([
-            'judul'         => ['required', 'string', 'max:255', 'min:4'],
-            'pengarang'     => ['required', 'string', 'max:255'],
-            'penerbit'      => ['required', 'string', 'max:255'],
-            'sinopsis'      => ['required', 'max:255', 'min: 10'],
-            'tahunterbit'   => ['required', 'numeric', 'max:9999'],
-            'hal'           => ['required', 'min: 1', 'numeric'],
-            'cover.*'       => ['mimes:jpeg,bmp,png,jpg']
-        ]);
-
-        if($validatedData){
+        if($this->validateData($request)){
             $book                   = new Book;
             $book->judul            = $request->judul;
             $book->pengarang        = $request->pengarang;
@@ -63,7 +49,7 @@ class BookController extends Controller
             $book->hal              = $request->hal;
             $book->save();
             $destinationPath        = 'image/buku/'; // upload path
-        
+
             foreach ($request->file('cover') as $key => $value) {
                 $img                = '/image/buku/'.date('YmdHis').$value->getClientOriginalName();
 
@@ -98,7 +84,7 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        return view('buku.book-edit', Book::find($id));
+        return view('officer.buku.book-edit', Book::find($id));
     }
 
     /**
@@ -110,17 +96,7 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $validatedData = $request->validate([
-            'judul'         => ['required', 'string', 'max:255', 'min:4'],
-            'pengarang'     => ['required', 'string', 'max:255'],
-            'penerbit'      => ['required', 'string', 'max:255'],
-            'sinopsis'      => ['required', 'max:255', 'min: 10'],
-            'tahunterbit'   => ['required', 'numeric', 'size:4'],
-            'hal'           => ['required', 'min: 1', 'numeric'],
-        ]);
-
-        if($validatedData){
+        if($this->validateData($request)){
             $book               = Book::find($id);
             $book->judul        = $request->judul;
             $book->pengarang    = $request->pengarang;
@@ -145,5 +121,50 @@ class BookController extends Controller
     {
         Book::find($id)->delete();
         return redirect()->route('books');
+    }
+
+    public function validateData($request) {
+        $validatedData = $request->validate([
+                                                'judul'         => ['required', 'string', 'max:255', 'min:4'],
+                                                'pengarang'     => ['required', 'string', 'max:255'],
+                                                'penerbit'      => ['required', 'string', 'max:255'],
+                                                'sinopsis'      => ['required', 'min: 10'],
+                                                'tahunterbit'   => ['required', 'numeric', 'max:9999'],
+                                                'hal'           => ['required', 'min: 1', 'numeric'],
+                                                'cover.*'       => ['mimes:jpeg,bmp,png,jpg']
+                                            ]);
+        return $validatedData;
+    }
+
+    public function fetch_data(Request $req)
+    {
+        if($req->ajax()) {
+            $sort_by    = $req->get('sort_by');
+            $sort_type  = $req->get('sort_type');
+            $table      = $req->get('t');
+            $search     = $req->get('query');
+            $penerbit   = explode(",",$req->get('penerbit'));
+            $pengarang  = explode(",",$req->get('pengarang'));
+            $tahun      = $req->get('thn');
+            $search     = str_replace(" ", "%", $search);
+            $books      = Book::when($penerbit[0] != "",function($query) use($search, $penerbit) {
+                                $query->where('judul','like','%'.$search.'%')
+                                    ->whereIn('penerbit',$penerbit);
+                                })
+                                ->when(($penerbit[0] != "" && $pengarang[0] != ""),function($query) use($search, $penerbit, $pengarang) {
+                                $query->where('judul','like','%'.$search.'%')
+                                        ->whereIn('pengarang',$pengarang)
+                                        ->whereIn('penerbit',$penerbit);
+                                })
+                                ->when(($penerbit[0] != "" && $pengarang[0] != "" && $tahun[0] != ""),function($query) use($search, $penerbit, $pengarang, $tahun) {
+                                $query->where('judul','like','%'.$search.'%')
+                                      ->whereIn('pengarang',$pengarang)
+                                      ->whereIn('penerbit',$penerbit)
+                                      ->where('tahunterbit','=',$tahun);
+                                })
+                                ->orderBy($sort_by, $sort_type)
+                                ->paginate(10);
+            return view('officer.buku.book-data', compact('books'))->render();
+        }
     }
 }

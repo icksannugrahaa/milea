@@ -16,7 +16,7 @@
 <div class="container">
     <h1>Tambah Buku</h1>
     <hr>
-    <form action="{{route('book.simpan')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('book.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group row">
             <label for="judul" class="col-md-2 col-form-label">Judul</label>

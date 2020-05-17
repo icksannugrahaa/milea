@@ -4,17 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class OfficerController extends Controller
+class OfficerController extends OfficeAuthController
 {
-     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:officer');
-    }
 
     /**
      * Display a listing of the resource.

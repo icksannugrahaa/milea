@@ -30,7 +30,7 @@
 @endsection
 
 @section('content')
-<div class="jumbotron jumbotron-fluid parallax" style="margin-top: 4.3%">
+<div class="jumbotron jumbotron-fluid parallax" style="margin-top: -3%">
     <div class="container text-center" style="background-color: rgba(255, 255, 225, 0.8);">
         <h1 class="display-4">Milenial Library Application</h1>
         <p class="lead">Kata-kata bijak !!</p>
@@ -74,147 +74,51 @@
             <br>
         </div>
         <div class="col-md-12 text-center">
-            <h2 class="float-left">Buku Terpopuler</h2>
+            <h2 class="float-left">Buku Terbaru</h2>
             <a href="#" class="float-right m-3">Lihat Semua</a>
             <br>
             <hr>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
+        @foreach ($newest_books as $book)
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card" style="margin: 0% 5%;">
+                    <img src="{{ asset($book->image) }}"
+                        class="card-img-top img-fluid" alt="...">
+                    <div class="card-body col-12">
+                        <h6 class="text-truncate" > <a href="{{route('book.show', $book->judul)}}"> {{$book->judul}} </a></h6>
+                        <hr>
+                        <p class="text-truncate" >{{$book->sinopsis}}.</p>
+                        <hr>
+                        <span class="badge badge-success">{{ ($book->status == 1) ? "Tersedia" : "Tidak Tersedia" }}</span>
+                    </div>
                 </div>
+                <br>
             </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
+        @endforeach
 
         <div class="col-md-12 text-center">
             <br><br>
-            <h2 class="float-left">Buku Pilihan</h2>
+            <h2 class="float-left">Buku Terlaris</h2>
             <a href="#" class="float-right m-3">Lihat Semua</a>
             <br>
             <hr>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
+        @foreach ($populer_books as $book)
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card" style="margin: 0% 5%;">
+                    <img src="{{ asset($book->image) }}"
+                        class="card-img-top img-fluid" alt="...">
+                    <div class="card-body col-12">
+                        <h6 class="text-truncate" > <a href="{{route('book.show', $book->judul)}}"> {{$book->judul}} </a></h6>
+                        <hr>
+                        <p class="text-truncate" >{{$book->sinopsis}}.</p>
+                        <hr>
+                        <span class="badge badge-success">{{ ($book->status == 1) ? "Tersedia" : "Tidak Tersedia" }}</span>
+                    </div>
                 </div>
+                <br>
             </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="card" style="margin: 0% 5%;">
-                <img src="{{ asset('image/buku/hak_angket__w414_hauto.jpg') }}"
-                    class="card-img-top img-fluid" alt="...">
-                <div class="card-body col-12">
-                    <h6 class="text-truncate" >Hak Angket Kawal Demokrasi</h6>
-                    <hr>
-                    <p class="text-truncate" >Buku ini penting sebagai bacaan
-                        bagi para pengambil kebijakan, khususnya
-                        terkait tata kelola pemerintahan daerah.</p>
-                    <hr>
-                    <span class="badge badge-success">Tersedia</span>
-                </div>
-            </div>
-            <br>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection
