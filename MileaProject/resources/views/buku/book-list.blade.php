@@ -65,17 +65,16 @@
         var reverse_order = '';
         if (order_type == 'asc') {
             $('#sort_type').val('desc');
-            reverse_order = 'desc';
+            reverse_order = 'asc';
         } else if (order_type == 'desc') {
             $('#sort_type').val('asc');
-            reverse_order = 'asc';
+            reverse_order = 'desc';
         }
         $('#sort_by').val(coloum_name);
         $('#sort_type').val(reverse_order);
         var page = $('#sort_page').val();
         fetch_data(page, reverse_order, coloum_name);
     });
-
     $(document).on('click', '.pagination a', function (event) {
         event.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
@@ -162,12 +161,6 @@
                             <option value="">-- Jenis urutan --</option>
                             <option value="desc">Terbaru</option>
                             <option value="asc">Terlama</option>
-                        </select>
-                        &nbsp;
-                        <select class="form-control col-md-3 sort" name="sort_by" id="sort_by">
-                            <option value="">-- Urut Berdasarkan --</option>
-                            <option value="diskon">Diskon</option>
-                            <option value="rating">Terbaik</option>
                         </select>
                     </div>
                     <div class="row" id="list_data">

@@ -1,3 +1,9 @@
+@if(count($books) == 0)
+<tr>
+    <td colspan="7"> <h5 class="text-center">Tidak ada data buku !</h5></td>
+</tr>
+@endif
+
 @foreach ($books as $book)
 <tr>
     <th scope="row">{{ ($books->currentPage() * $books->perPage())-($books->perPage() - $loop->iteration) }}</th>
@@ -16,6 +22,7 @@
     </td>
 </tr>
 @endforeach
+
 <tr>
     <td colspan="7" align="center">
         {!! $books->links() !!}

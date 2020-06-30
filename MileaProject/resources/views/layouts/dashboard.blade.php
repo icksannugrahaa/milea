@@ -5,11 +5,13 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/material-components-web.min.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
     {{-- Icon --}}
     <link rel="stylesheet" href="{{asset('css/materialicon.css')}}">
@@ -46,11 +48,20 @@
                         <span class="nav-link-text">Manajemen Buku</span>
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-                    <a class="nav-link" href="tables.html">
-                        <i class="fad fa-user-cog"></i>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#user"
+                        data-parent="#exampleAccordion">
+                        <i class="fad fa-history"></i>
                         <span class="nav-link-text">Manajemen User</span>
                     </a>
+                    <ul class="sidenav-second-level collapse" id="user">
+                        <li>
+                            <a href="{{url('officer/manajemen-user/user')}}">User</a>
+                        </li>
+                        <li>
+                            <a href="cards.html">Officer</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"
@@ -126,22 +137,22 @@
         </div>
         <!-- Option Modal-->
         <div class="modal fade" id="optionModal" tabindex="-1" role="dialog" aria-labelledby="optionModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="optionModalLabel"></h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="optionModalBody"></div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="#" id="optionModalAction">Logout</a>
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="optionModalLabel"></h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="optionModalBody"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="#" id="optionModalAction">Logout</a>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
     <!-- Optional JavaScript -->
@@ -152,23 +163,27 @@
     <script src="{{asset('js/jquery-ui.min.js')}}"></script>
     <script src="{{asset('js/material-components-web.min.js')}}"></script>
     <script src="{{asset('js/dashboard.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js">
+    </script>
     @yield('JS')
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.multiple-checkboxes').multiselect({
-            includeSelectAllOption: true,
+                includeSelectAllOption: true,
             });
         });
+
         function launchOptionModal(event, data, method) {
-            var urlAction = '{{url()->current()}}'+'/'+event.toLowerCase()+'/'+data;
+            var urlAction = '{{url()->current()}}' + '/' + event.toLowerCase() + '/' + data;
             $('#optionModalLabel').html("Konfirmasi");
-            $('#optionModalBody').html("Apakah anda yakin akan <b>"+event+"</b> Data ?, <b>Tekan "+event+"</b> untuk melanjutkan");
+            $('#optionModalBody').html("Apakah anda yakin akan <b>" + event + "</b> Data ?, <b>Tekan " + event +
+                "</b> untuk melanjutkan");
             $('#optionModalAction').attr("href", urlAction);
             $('#optionModalAction').html(event);
             $('#optionModal').modal('show');
         }
+
     </script>
 </body>
 

@@ -75,14 +75,14 @@
         </div>
         <div class="col-md-12 text-center">
             <h2 class="float-left">Buku Terbaru</h2>
-            <a href="#" class="float-right m-3">Lihat Semua</a>
+            <a href="{{url('books/created_at')}}" class="float-right m-3">Lihat Semua</a>
             <br>
             <hr>
         </div>
-        @foreach ($newest_books as $book)
+        @foreach ($new_books as $book)
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card" style="margin: 0% 5%;">
-                    <img src="{{ asset($book->image) }}"
+                    <img src="{{ asset($new_book_covers[$book->id]->image) }}"
                         class="card-img-top img-fluid" alt="...">
                     <div class="card-body col-12">
                         <h6 class="text-truncate" > <a href="{{route('book.show', $book->judul)}}"> {{$book->judul}} </a></h6>
@@ -99,14 +99,14 @@
         <div class="col-md-12 text-center">
             <br><br>
             <h2 class="float-left">Buku Terlaris</h2>
-            <a href="#" class="float-right m-3">Lihat Semua</a>
+            <a href="{{url('books/rating')}}" class="float-right m-3">Lihat Semua</a>
             <br>
             <hr>
         </div>
-        @foreach ($populer_books as $book)
+        @foreach ($popular_books as $book)
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card" style="margin: 0% 5%;">
-                    <img src="{{ asset($book->image) }}"
+                    <img src="{{ asset($pb_covers[$book->id]->image) }}"
                         class="card-img-top img-fluid" alt="...">
                     <div class="card-body col-12">
                         <h6 class="text-truncate" > <a href="{{route('book.show', $book->judul)}}"> {{$book->judul}} </a></h6>

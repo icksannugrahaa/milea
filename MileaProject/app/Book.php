@@ -10,7 +10,7 @@ class Book extends Model
         'judul', 'pengarang', 'penerbit', 'sinopsis', 'tahunterbit', 'hal'
     ];
 
-    public function bookCover() {
-        return $this->hasMany('App\BookCover', 'book_id');
+    public function bookcovers() {
+        return $this->hasMany('App\BookCover');
     }
 }

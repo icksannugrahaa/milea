@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Book;
 use App\BookCover;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends OfficeAuthController
 {
@@ -18,7 +20,8 @@ class BookController extends OfficeAuthController
     {
         $list_pengarang             = Book::select('pengarang')->distinct()->get();
         $list_penerbit              = Book::select('penerbit')->distinct()->get();
-        return view('officer.buku.book-list', ['books' => Book::paginate(10), 'list_pengarang' => $list_pengarang, 'list_penerbit' => $list_penerbit]);
+        $books                      = Book::paginate(10);
+        return view('officer.buku.book-list', compact('books','list_pengarang','list_penerbit'));
     }
 
     /**
@@ -39,7 +42,7 @@ class BookController extends OfficeAuthController
      */
     public function store(Request $request)
     {
-        if($this->validateData($request)){
+        if($this->validateData($request, 'create')){
             $book                   = new Book;
             $book->judul            = $request->judul;
             $book->pengarang        = $request->pengarang;
@@ -47,11 +50,14 @@ class BookController extends OfficeAuthController
             $book->sinopsis         = $request->sinopsis;
             $book->tahunterbit      = $request->tahunterbit;
             $book->hal              = $request->hal;
+            $book->bk_total         = $request->bk_total;
+            $book->bk_sisa          = $request->bk_total;
+            $book->status           = 1;
             $book->save();
             $destinationPath        = 'image/buku/'; // upload path
 
             foreach ($request->file('cover') as $key => $value) {
-                $img                = '/image/buku/'.date('YmdHis').$value->getClientOriginalName();
+                $img                = $destinationPath.date('YmdHis').$value->getClientOriginalName();
 
                 $covers             = new BookCover;
                 $covers->book_id    = $book->id;
@@ -96,7 +102,7 @@ class BookController extends OfficeAuthController
      */
     public function update(Request $request, $id)
     {
-        if($this->validateData($request)){
+        if($this->validateData($request, 'update')){
             $book               = Book::find($id);
             $book->judul        = $request->judul;
             $book->pengarang    = $request->pengarang;
@@ -104,7 +110,30 @@ class BookController extends OfficeAuthController
             $book->sinopsis     = $request->sinopsis;
             $book->tahunterbit  = $request->tahunterbit;
             $book->hal          = $request->hal;
+            $book->bk_total     = $request->bk_total;
+            $book->bk_sisa      = $request->bk_total;
+            $book->status       = (isset($request->status) ? 1 : 0 );
             $book->save();
+
+            $destinationPath        = 'image/buku/'; // upload path
+            if(!is_null($request->file('cover'))) {
+                $covers     = BookCover::where('book_id',$id)->get();
+                foreach ($covers as $key => $value) {
+                    unlink($value->image);
+                }
+                BookCover::where('book_id',$id)->delete();
+
+                foreach ($request->file('cover') as $key => $value) {
+                    $img                = $destinationPath.date('YmdHis').$value->getClientOriginalName();
+
+                    $covers             = new BookCover;
+                    $covers->book_id    = $book->id;
+                    $covers->image      = $img;
+                    $covers->save();
+
+                    $value->move($destinationPath, $img);
+                }
+            }
 
             return redirect()->route('books');
 
@@ -119,20 +148,34 @@ class BookController extends OfficeAuthController
      */
     public function destroy($id)
     {
-        Book::find($id)->delete();
+        $book       = Book::findOrFail($id);
+        $covers     = BookCover::where('book_id',$id)->get();
+        if(!is_null($covers)) {
+            foreach ($covers as $key => $value) {
+                unlink($value->image);
+            }
+            BookCover::where('book_id',$id)->delete();
+        }
+        $book->delete();
+
         return redirect()->route('books');
     }
 
-    public function validateData($request) {
-        $validatedData = $request->validate([
-                                                'judul'         => ['required', 'string', 'max:255', 'min:4'],
-                                                'pengarang'     => ['required', 'string', 'max:255'],
-                                                'penerbit'      => ['required', 'string', 'max:255'],
-                                                'sinopsis'      => ['required', 'min: 10'],
-                                                'tahunterbit'   => ['required', 'numeric', 'max:9999'],
-                                                'hal'           => ['required', 'min: 1', 'numeric'],
-                                                'cover.*'       => ['mimes:jpeg,bmp,png,jpg']
-                                            ]);
+    public function validateData($request, $event) {
+        $data = [
+                    'pengarang'     => ['required', 'string', 'max:255'],
+                    'penerbit'      => ['required', 'string', 'max:255'],
+                    'sinopsis'      => ['required', 'min: 10'],
+                    'tahunterbit'   => ['required', 'numeric', 'max:9999'],
+                    'hal'           => ['required', 'min: 1', 'numeric'],
+                    'cover.*'       => ['mimes:jpeg,bmp,png,jpg']
+        ];
+        if($event == 'create') {
+            $data['judul']      = ['required', 'string', 'max:255', 'min:4', 'unique:App\Book,judul'];
+        } else {
+            $data['judul']      = ['required', 'string', 'max:255', 'min:4'];
+        }
+        $validatedData = $request->validate($data);
         return $validatedData;
     }
 
