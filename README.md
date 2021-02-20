@@ -1,5 +1,5 @@
 # milea
-Millenial Library (created with Laravel and Vue.Js)
+Millenial Library (created with Laravel)
 
 Anggota : 
   - Aldi Herdiansyah - Selesai
